@@ -22,5 +22,13 @@ class ChatbotTests(unittest.TestCase):
             payload = key + value
             self.assertNotIn('++$++', payload)
 
+    def test_if_onle_ids_of_conversations_are_returned(self):
+        """Test if only ids of the dialogs are returned."""
+        conversations = bot.import_dataset('movie_conversations.txt')
+        payload = bot.get_conversations(conversations)
+        print(payload)
+        self.assertNotIn('++$++', payload)
+
+
 if __name__ == "__main__":
     unittest.main()

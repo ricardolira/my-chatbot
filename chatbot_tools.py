@@ -5,7 +5,6 @@ import re
 import time
 
 
-# Importing the dataset
 def import_dataset(data_path, encoding='utf-8', errors='ignore'):
     """Import data from file path nad return parsed data."""
     with open(
@@ -35,5 +34,34 @@ def get_conversations(all_conversations):
     for conversaation in all_conversations[:-1]:
         _one_conversation = re.findall(conversations_pattern, conversaation)
         ids_of_conversations.append(_one_conversation)
-
     return ids_of_conversations
+
+
+def separate_questions_from_answers(all_conversations):
+    """Return two lsts containing questions and answer, respectively."""
+    questions = list()
+    answers = list()
+    for conversation in all_conversations:
+        for question, answer in zip(conversation[0:], conversation[1:]):
+            questions.append(question)
+            answers.append(answer)
+    return questions, answers
+
+
+def clean_text(text):
+    """Clear text based on different non-expected english grammar."""
+    text = text.lower()
+    text = re.sub(r"i'm", "i am", text)
+    text = re.sub(r"he's", "he is", text)
+    text = re.sub(r"she's", "she is", text)
+    text = re.sub(r"that's", "that is", text)
+    text = re.sub(r"what's", "what is", text)
+    text = re.sub(r"where's", "where is", text)
+    text = re.sub(r"\'ll", "will", text)
+    text = re.sub(r"\'ve", "have", text)
+    text = re.sub(r"\'re's", "are", text)
+    text = re.sub(r"\'d", "would", text)
+    text = re.sub(r"won't", "will not", text)
+    text = re.sub(r"can't", "cannot", text)
+    text = re.sub(r"[-()\"#/@;:<>{}+=~|.?,]", "", text)
+    return text

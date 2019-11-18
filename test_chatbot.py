@@ -20,15 +20,28 @@ class ChatbotTests(unittest.TestCase):
         mapped_lines = bot.map_lines(lines)
         for key, value in mapped_lines.items():
             payload = key + value
+
             self.assertNotIn('++$++', payload)
 
     def test_if_onle_ids_of_conversations_are_returned(self):
         """Test if only ids of the dialogs are returned."""
         conversations = bot.import_dataset('movie_conversations.txt')
         payload = bot.get_conversations(conversations)
-        print(payload)
+
         self.assertNotIn('++$++', payload)
 
+    def test_if_questions_are_separated_from_answers(self):
+        """Test if questions are followed by answer index."""
+        all_conversations = bot.import_dataset('movie_conversations.txt')
+        all_conversations = bot.get_conversations(all_conversations)
+        questions, answers = bot.separate_questions_from_answers(
+            all_conversations
+        )
+        for question, answer in zip(questions, answers):
+            question = int(question.replace('L', ''))
+            answer = int(answer.replace('L', ''))
+
+            self.assertTrue(answer - question == 1)
 
 if __name__ == "__main__":
     unittest.main()

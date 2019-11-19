@@ -65,3 +65,19 @@ def clean_text(text):
     text = re.sub(r"can't", "cannot", text)
     text = re.sub(r"[-()\"#/@;:<>{}+=~|.?,]", "", text)
     return text
+
+
+def model_inputs():
+    """Initialize the tensor flow variables."""
+    inputs = tf.placeholder(tf.int32, [None, None], name='input')
+    target = tf.placeholder(tf.int32, [None, None], name='target')
+    lr = tf.placeholder(tf.float32, name='learning_rate')
+    keep_prob = tf.placeholder(tf.float32, name='keep_prob')
+    return inputs, target, lr, keep_prob
+
+
+def proprocess_targets(targets, word2int, batch_size=10):
+    lhs = tf.fill([batch_size, 1], word2int['<SOS>'])
+    rhs = tf.strided_slice(targets, [0, 0,], [batch_size, -1], [1, 1])
+    preprocessed_targets = tf.concat([lhs, rhs], 1)
+    return preprocessed_targets

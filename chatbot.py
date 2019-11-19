@@ -94,3 +94,5 @@ for length in range(1, max_words + 1):
         if len(i[1]) == length:
             sorted_clean_questions.append(questions_to_int[i[0]])
             sorted_clean_answers.append(answers_to_int[i[0]])
+
+inputs, targets, lr, keep_prob = bot.model_inputs()
